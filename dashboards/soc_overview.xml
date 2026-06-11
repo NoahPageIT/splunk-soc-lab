@@ -1,0 +1,100 @@
+<dashboard version="1.1" theme="dark">
+  <label>SOC Overview</label>
+  <description>Windows Security monitoring — failed logons, account targeting, privileged access, and anti-forensics. Built on Splunk Enterprise from the Windows Security event log.</description>
+
+  <row>
+    <panel>
+      <title>Failed Logons (24h)</title>
+      <single>
+        <search>
+          <query>index=main EventCode=4625 | stats count</query>
+          <earliest>-24h</earliest><latest>now</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[10,50]</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Successful Logons (24h)</title>
+      <single>
+        <search>
+          <query>index=main EventCode=4624 | stats count</query>
+          <earliest>-24h</earliest><latest>now</latest>
+        </search>
+      </single>
+    </panel>
+    <panel>
+      <title>Privileged Logons (24h)</title>
+      <single>
+        <search>
+          <query>index=main EventCode=4672 | stats count</query>
+          <earliest>-24h</earliest><latest>now</latest>
+        </search>
+      </single>
+    </panel>
+    <panel>
+      <title>Audit Log Cleared</title>
+      <single>
+        <search>
+          <query>index=main EventCode=1102 | stats count</query>
+          <earliest>-24h</earliest><latest>now</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x53a051","0xdc4e41"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Failed Logon Trend</title>
+      <chart>
+        <search>
+          <query>index=main EventCode=4625 | timechart span=30m count as "Failed Logons"</query>
+          <earliest>-24h</earliest><latest>now</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.fieldColors">{"Failed Logons":0xdc4e41}</option>
+        <option name="charting.legend.placement">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Top Targeted Accounts (Failed Logons)</title>
+      <chart>
+        <search>
+          <query>index=main EventCode=4625 | stats count by Account_Name | sort -count | head 10</query>
+          <earliest>-24h</earliest><latest>now</latest>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.legend.placement">none</option>
+      </chart>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Logon Activity — Success vs Failure</title>
+      <chart>
+        <search>
+          <query>index=main (EventCode=4624 OR EventCode=4625) | eval Result=if(EventCode=4624,"Success","Failure") | timechart span=1h count by Result</query>
+          <earliest>-24h</earliest><latest>now</latest>
+        </search>
+        <option name="charting.chart">line</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Recent Failed Logons</title>
+      <table>
+        <search>
+          <query>index=main EventCode=4625 | sort -_time | table _time Account_Name Logon_Type Source_Network_Address | head 20</query>
+          <earliest>-24h</earliest><latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>
