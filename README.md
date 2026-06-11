@@ -6,6 +6,10 @@ Built to demonstrate practical SIEM skills — data onboarding, SPL detection se
 
 > Companion to [Argus SIEM](https://github.com/NoahPageIT/argus-siem): the same brute-force attack is detected by a custom-built SIEM **and** reproduced here in Splunk — one attack, two SIEMs.
 
+![SOC Overview dashboard in Splunk Enterprise](docs/dashboard.png)
+
+> *The SOC Overview dashboard running on live Windows Security data — note the failed-logon spike and `attacker_test` topping the targeted-accounts panel after a simulated brute-force attack.*
+
 ---
 
 ## The SOC Overview dashboard
@@ -18,8 +22,6 @@ A single pane of glass over Windows authentication activity (`dashboards/soc_ove
 - **Top Targeted Accounts** — which accounts are being hammered
 - **Logon Activity: Success vs Failure** — baseline vs anomaly
 - **Recent Failed Logons** — live triage table (time, account, logon type, source)
-
-> Add a screenshot at `docs/dashboard.png` once you've populated it with data.
 
 ---
 
