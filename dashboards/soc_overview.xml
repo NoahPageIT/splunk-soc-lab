@@ -1,6 +1,6 @@
 <dashboard version="1.1" theme="dark">
   <label>SOC Overview</label>
-  <description>Windows Security monitoring — failed logons, account targeting, privileged access, and anti-forensics. Built on Splunk Enterprise from the Windows Security event log.</description>
+  <description>Windows Security monitoring - failed logons, account targeting, privileged access, and anti-forensics. Built on Splunk Enterprise from the Windows Security event log.</description>
 
   <row>
     <panel>
@@ -77,7 +77,7 @@
 
   <row>
     <panel>
-      <title>Logon Activity — Success vs Failure</title>
+      <title>Logon Activity - Success vs Failure</title>
       <chart>
         <search>
           <query>index=main (EventCode=4624 OR EventCode=4625) | eval Result=if(EventCode=4624,"Success","Failure") | timechart span=1h count by Result</query>

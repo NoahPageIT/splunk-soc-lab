@@ -10,14 +10,14 @@ All assume the `[WinEventLog://Security]` input is feeding `index=main`.
 index=main EventCode=4625
 ```
 
-**Failed logons ranked by targeted account** — spot a targeted account
+**Failed logons ranked by targeted account** - spot a targeted account
 ```spl
 index=main EventCode=4625
 | stats count by Account_Name
 | sort -count
 ```
 
-**Brute-force detection** — 5+ failures from one account in a 5-minute window (MITRE **T1110**)
+**Brute-force detection** - 5+ failures from one account in a 5-minute window (MITRE **T1110**)
 ```spl
 index=main EventCode=4625
 | bucket _time span=5m
@@ -26,14 +26,14 @@ index=main EventCode=4625
 | sort -count
 ```
 
-**Possible password spray** — one source hitting many accounts
+**Possible password spray** - one source hitting many accounts
 ```spl
 index=main EventCode=4625
 | stats dc(Account_Name) as accounts_targeted by Source_Network_Address
 | where accounts_targeted >= 5
 ```
 
-**Successful logon after repeated failures** — possible cracked credential
+**Successful logon after repeated failures** - possible cracked credential
 ```spl
 index=main (EventCode=4624 OR EventCode=4625)
 | transaction Account_Name maxspan=10m
@@ -47,19 +47,19 @@ index=main (EventCode=4624 OR EventCode=4625)
 index=main EventCode=4720 | table _time Account_Name
 ```
 
-**Privileged logon — admin rights assigned** (MITRE **T1078.003**)
+**Privileged logon - admin rights assigned** (MITRE **T1078.003**)
 ```spl
 index=main EventCode=4672 | stats count by Account_Name
 ```
 
 ## Anti-forensics
 
-**Security audit log cleared** (MITRE **T1070.001**) — high-severity, attacker covering tracks
+**Security audit log cleared** (MITRE **T1070.001**) - high-severity, attacker covering tracks
 ```spl
 index=main EventCode=1102
 ```
 
-## Reference — key Windows Security event IDs
+## Reference - key Windows Security event IDs
 | Event ID | Meaning |
 |----------|---------|
 | 4624 | Successful logon |
